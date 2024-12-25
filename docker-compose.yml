@@ -1,0 +1,48 @@
+services:
+  bahmni-dev:
+    build: .
+    container_name: bahmni-dev
+    # Bind mount your local code into the container
+    volumes:
+      - .:/usr/src/app
+    # Forward the port so you can access the app on localhost:3000
+    ports:
+      - "3000:3000"
+    
+    command: >
+      /bin/bash -c "
+        cd micro-frontends &&
+        yarn install &&
+        yarn build &&
+        cd ../ui &&
+        yarn cache clean &&
+        yarn install &&
+        yarn ci &&
+        /bin/bash"
+
+# Build the container
+# docker compose build
+
+# Run the container
+# docker compose up -d
+
+# Stop the container
+# docker compose down
+
+# Remove the container
+# docker compose rm
+
+# Remove the container and the image
+# docker compose down --rmi all
+
+# Remove all containers
+# docker rm $(docker ps -a -q)
+
+# Remove all images
+# docker rmi $(docker images -q)
+
+# Run a single command
+# docker compose exec bahmni-dev bash -c "cd micro-frontends && yarn build"
+
+# Or run the full sequence
+# docker compose exec bahmni-dev bash -c "cd micro-frontends && yarn install && yarn build && cd ../ui && yarn cache clean && yarn install && yarn ci"
